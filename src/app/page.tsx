@@ -1,20 +1,17 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Quote, Star, Users, Globe, BarChart, Shield, Zap, CheckCircle, TrendingUp, Award, Clock, Target, Building2 } from 'lucide-react'
-import { ContentImage } from '@/components/shared/content-image'
+import {
+  ArrowRight, Quote, Star, Globe, BarChart, Shield, Zap,
+  CheckCircle, TrendingUp, Clock, Target, Newspaper,
+  Users, Award, FileText, ChevronRight,
+} from 'lucide-react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { SchemaJsonLd } from '@/components/seo/schema-jsonld'
-import { TaskPostCard } from '@/components/shared/task-post-card'
-import { SITE_CONFIG, type TaskKey } from '@/lib/site-config'
+import { SITE_CONFIG } from '@/lib/site-config'
 import { buildPageMetadata } from '@/lib/seo'
 import { fetchTaskPosts } from '@/lib/task-data'
 import { siteContent } from '@/config/site.content'
-import { getFactoryState } from '@/design/factory/get-factory-state'
-import { getProductKind, type ProductKind } from '@/design/factory/get-product-kind'
-import type { SitePost } from '@/lib/site-connector'
-import { getHomeEditorialMockPosts, mergeEditorialPostsForHome } from '@/lib/home-editorial-mock'
-import { HOME_PAGE_OVERRIDE_ENABLED, HomePageOverride } from '@/overrides/home-page'
 
 export const revalidate = 300
 
@@ -30,375 +27,574 @@ export async function generateMetadata(): Promise<Metadata> {
   })
 }
 
-function MediaPressReleaseHome({ primaryTask, posts }: { primaryTask?: any; posts: SitePost[] }) {
+// ─── Color tokens ────────────────────────────────────────────────────────────
+const C = {
+  deep:      '#42032C',
+  orange:    '#D36B00',
+  sand:      '#E6D2AA',
+  parchment: '#F1EFDC',
+  deepHover: '#5C0840',
+  orangeHover: '#B85E00',
+  muted:     '#7A4A3A',
+  border:    '#D4C9A8',
+  cardBg:    '#FAF8F0',
+}
+
+// ─── Hero ─────────────────────────────────────────────────────────────────────
+function Hero() {
   return (
-    <main className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-red-50 to-orange-50 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-            <div>
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                Amplify Your Story Across Global Media
-              </h1>
-              <p className="mt-6 text-xl leading-8 text-gray-600">
-                Connect with 50,000+ journalists and media outlets. Get your release media in front of the right audience and drive meaningful coverage for your brand.
-              </p>
-              <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <Link 
-                  href="/pricing" 
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#E02401] px-8 py-4 text-base font-semibold text-white shadow-lg transition-all hover:bg-[#C01E01] hover:shadow-xl"
-                >
-                  Start Distribution
-                  <ArrowRight className="h-5 w-5" />
-                </Link>
-                <Link 
-                  href="/press-releases" 
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-[#E02401] bg-white px-8 py-4 text-base font-semibold text-[#E02401] transition-all hover:bg-[#E02401] hover:text-white"
-                >
-                  See Examples
-                </Link>
-              </div>
-              <div className="mt-8 flex items-center gap-8">
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">10,000+</div>
-                  <div className="text-sm text-gray-600">Media Outlets</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">500M+</div>
-                  <div className="text-sm text-gray-600">Monthly Readers</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">98%</div>
-                  <div className="text-sm text-gray-600">Client Satisfaction</div>
-                </div>
-              </div>
+    <section
+      style={{
+        background: `linear-gradient(135deg, ${C.deep} 0%, #6B0A48 60%, #8B1A5A 100%)`,
+      }}
+      className="relative overflow-hidden py-24 lg:py-32"
+    >
+      {/* Decorative circles */}
+      <div
+        className="pointer-events-none absolute -right-32 -top-32 h-[500px] w-[500px] rounded-full opacity-10"
+        style={{ background: C.orange }}
+      />
+      <div
+        className="pointer-events-none absolute -bottom-24 -left-24 h-[360px] w-[360px] rounded-full opacity-8"
+        style={{ background: C.sand }}
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-14 lg:grid-cols-2 lg:items-center">
+          {/* Left copy */}
+          <div>
+            <div
+              className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em]"
+              style={{ background: 'rgba(230,210,170,0.15)', color: C.sand, border: `1px solid rgba(230,210,170,0.25)` }}
+            >
+              <Newspaper className="h-3.5 w-3.5" />
+              Media Distribution Platform
             </div>
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-[#E02401]/20 to-[#F78812]/20 rounded-2xl flex items-center justify-center">
-                <div className="text-center">
-                  <Globe className="h-16 w-16 text-[#E02401] mx-auto mb-4" />
-                  <div className="text-2xl font-bold text-gray-900">Global Reach</div>
-                  <div className="text-gray-600 mt-2">150+ Countries</div>
-                </div>
-              </div>
+
+            <h1
+              className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
+              style={{ color: C.parchment, fontFamily: 'var(--font-display, serif)' }}
+            >
+              Amplify Your Story{' '}
+              <span style={{ color: C.sand }}>Across Global Media</span>
+            </h1>
+
+            <p className="mt-6 max-w-xl text-lg leading-8" style={{ color: 'rgba(230,210,170,0.85)' }}>
+              Connect with 50,000+ journalists and media outlets. Get your press release in front of the right audience and drive meaningful coverage for your brand.
+            </p>
+
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Link
+                href="/press-releases"
+                className="inline-flex items-center gap-2 rounded-lg px-7 py-3.5 text-sm font-semibold transition-all hover:opacity-90"
+                style={{ background: C.orange, color: C.parchment }}
+              >
+                Submit a Release
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/press"
+                className="inline-flex items-center gap-2 rounded-lg px-7 py-3.5 text-sm font-semibold transition-all"
+                style={{ background: 'rgba(241,239,220,0.12)', color: C.sand, border: `1px solid rgba(230,210,170,0.30)` }}
+              >
+                Browse Newsroom
+              </Link>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Featured Placement Section */}
-      <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <div className="inline-flex items-center justify-center rounded-full bg-[#E02401]/10 p-3">
-              <TrendingUp className="h-8 w-8 text-[#E02401]" />
-            </div>
-            <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Trusted by Industry Leaders
-            </h2>
-            <div className="mt-4 text-5xl font-bold text-[#E02401]">50,000+</div>
-            <p className="mt-4 text-lg text-gray-600">
-              Release media distributed for startups, Fortune 500 companies, and everything in between
-            </p>
-          </div>
-          <div className="mt-12 grid gap-8 lg:grid-cols-3">
-            {[
-              { name: 'Tech Startups', stat: '15,000+', desc: 'Innovative companies sharing their breakthrough moments' },
-              { name: 'Enterprise', stat: '25,000+', desc: 'Established businesses reaching global audiences' },
-              { name: 'Non-Profits', stat: '10,000+', desc: 'Organizations making a difference through powerful storytelling' }
-            ].map((segment, i) => (
-              <div key={i} className="text-center p-6 rounded-xl bg-white shadow-lg">
-                <div className="text-3xl font-bold text-[#E02401]">{segment.stat}</div>
-                <div className="mt-2 text-lg font-semibold text-gray-900">{segment.name}</div>
-                <div className="mt-2 text-sm text-gray-600">{segment.desc}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="bg-gray-50 py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Success Stories From Our Clients
-            </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Real results from businesses that trust Reporterahead for their media distribution
-            </p>
-          </div>
-          <div className="mt-12 grid gap-8 lg:grid-cols-3">
-            {[
-              {
-                name: "Alexandra Chen",
-                company: "NexusTech",
-                role: "VP of Communications",
-                avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop&crop=face",
-                content: "We saw a 300% increase in media pickup after switching to Reporterahead. Our product launch reached over 2 million readers through their network.",
-                rating: 5
-              },
-              {
-                name: "Marcus Williams",
-                company: "GreenFuture Solutions",
-                role: "CEO",
-                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=96&h=96&fit=crop&crop=face",
-                content: "The targeted distribution helped us secure coverage in major environmental publications. Exactly what our sustainability initiative needed.",
-                rating: 5
-              },
-              {
-                name: "Jennifer Foster",
-                company: "HealthBridge Medical",
-                role: "Marketing Director",
-                avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=96&h=96&fit=crop&crop=face",
-                content: "From startup to industry leader in 6 months. Reporterahead's distribution was key to our rapid growth and credibility.",
-                rating: 5
-              }
-            ].map((testimonial, i) => (
-              <div key={i} className="rounded-xl bg-white p-8 shadow-lg">
-                <Quote className="mb-4 h-8 w-8 text-[#F78812]" />
-                <p className="text-lg text-gray-700">{testimonial.content}</p>
-                <div className="mt-6 flex items-center">
-                  <img
-                    src={testimonial.avatar}
-                    alt={testimonial.name}
-                    className="h-12 w-12 rounded-full object-cover"
-                  />
-                  <div className="ml-4">
-                    <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                    <div className="text-sm text-gray-600">{testimonial.role} at {testimonial.company}</div>
-                    <div className="flex mt-1">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 text-[#F78812] fill-current" />
-                      ))}
-                    </div>
-                  </div>
+            {/* Stats row */}
+            <div className="mt-12 flex flex-wrap gap-8">
+              {[
+                { value: '10,000+', label: 'Media Outlets' },
+                { value: '500M+', label: 'Monthly Readers' },
+                { value: '98%', label: 'Client Satisfaction' },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <div className="text-2xl font-bold" style={{ color: C.sand }}>{stat.value}</div>
+                  <div className="mt-0.5 text-xs uppercase tracking-[0.18em]" style={{ color: 'rgba(230,210,170,0.65)' }}>{stat.label}</div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="bg-gray-50 py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              How It Works
-            </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Get your press release distributed in 4 simple steps
-            </p>
-          </div>
-          <div className="mt-12 grid gap-8 lg:grid-cols-4">
-            {[
-              { icon: Target, title: "Pick where & when", desc: "Choose your target audience and distribution timing" },
-              { icon: Zap, title: "Publish", desc: "Submit your release media with our easy-to-use platform" },
-              { icon: Globe, title: "Be seen", desc: "Your story reaches thousands of journalists and media outlets" },
-              { icon: BarChart, title: "Track results", desc: "Monitor performance with detailed analytics and reports" }
-            ].map((step, i) => (
-              <div key={i} className="text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#E02401] text-white">
-                  <step.icon className="h-8 w-8" />
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900">{step.title}</h3>
-                <p className="mt-2 text-gray-600">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Trust Section */}
-      <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Trusted by Industry Leaders
-            </h2>
-            <div className="mt-8 flex justify-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-6 w-6 fill-[#F78812] text-[#F78812]" />
               ))}
             </div>
-            <p className="mt-4 text-lg text-gray-600">
-              4.9/5 average rating from 2,000+ satisfied customers
-            </p>
           </div>
-          <div className="mt-12 grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-6">
-            {['Microsoft', 'Google', 'Amazon', 'Apple', 'Meta', 'Netflix'].map((company) => (
-              <div key={company} className="flex items-center justify-center">
-                <span className="text-sm font-medium text-gray-500">{company}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Blog / Academy Section */}
-      <section className="bg-gray-50 py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Latest Insights
-            </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Tips and best practices for effective release media distribution
-            </p>
-          </div>
-          <div className="mt-12 grid gap-8 lg:grid-cols-3">
-            {[
-              { id: 1, title: 'TechStart Inc. Announces $50M Series C Funding Round', excerpt: 'Leading AI technology company secures major investment to expand global operations and develop next-generation machine learning platforms.', image: 'https://picsum.photos/seed/tech1/600/400', category: 'Technology' },
-              { id: 2, title: 'Global Marketing Co. Launches Revolutionary Digital Campaign Platform', excerpt: 'New platform promises to transform how businesses connect with customers through AI-driven personalization and real-time analytics.', image: 'https://picsum.photos/seed/marketing2/600/400', category: 'Marketing' },
-              { id: 3, title: 'Innovation Labs Partners with Major Universities for Research Initiative', excerpt: 'Strategic collaboration aims to advance sustainable technology solutions and create breakthrough innovations in renewable energy.', image: 'https://picsum.photos/seed/research3/600/400', category: 'Research' },
-              { id: 4, title: 'EcoTech Solutions Unveils Carbon-Neutral Manufacturing Process', excerpt: 'Pioneering sustainable manufacturing method reduces carbon emissions by 90% while maintaining production efficiency and cost-effectiveness.', image: 'https://picsum.photos/seed/eco4/600/400', category: 'Sustainability' },
-              { id: 5, title: 'HealthTech Startup Receives FDA Approval for Revolutionary Medical Device', excerpt: 'Breakthrough diagnostic technology promises early detection of diseases with unprecedented accuracy and non-invasive procedures.', image: 'https://picsum.photos/seed/health5/600/400', category: 'Healthcare' },
-              { id: 6, title: 'FinTech Company Disrupts Traditional Banking with Digital-First Approach', excerpt: 'New mobile banking platform offers zero-fee transactions, AI-powered financial advice, and seamless international payments.', image: 'https://picsum.photos/seed/finance6/600/400', category: 'Finance' },
-            ].map((item) => (
-              <div key={item.id} className="group rounded-xl bg-white shadow-lg transition-all hover:shadow-xl overflow-hidden">
-                <div className="aspect-video overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-6">
-                  <span className="inline-flex items-center rounded-full bg-[#F78812]/10 px-3 py-1 text-xs font-semibold text-[#F78812]">
-                    {item.category}
-                  </span>
-                  <h3 className="mt-3 text-lg font-semibold text-gray-900 group-hover:text-[#E02401] line-clamp-2">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-                    {item.excerpt}
-                  </p>
-                  <Link href={`/press-releases/${item.id}`} className="mt-4 inline-flex items-center text-[#E02401] hover:text-[#C01E01] text-sm font-medium">
-                    Read more <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-12 text-center">
-            <Link
-              href="/press-releases"
-              className="inline-flex items-center gap-2 rounded-lg bg-[#E02401] px-6 py-3 text-base font-semibold text-white transition-all hover:bg-[#C01E01]"
+          {/* Right visual card */}
+          <div className="hidden lg:block">
+            <div
+              className="rounded-2xl p-8"
+              style={{ background: 'rgba(241,239,220,0.08)', border: `1px solid rgba(230,210,170,0.18)` }}
             >
-              View All Release Media
-              <ArrowRight className="h-5 w-5" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Customer Reviews Section */}
-      <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Customer Reviews
-            </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Real feedback from our valued customers
-            </p>
-          </div>
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
-            {[
-              { name: 'Alexandra Chen', role: 'VP of Communications, NexusTech', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face', review: 'Reporterahead helped us reach over 2 million readers with our product launch. The distribution speed and media coverage exceeded all expectations.' },
-              { name: 'Marcus Williams', role: 'CEO, GreenFuture Solutions', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face', review: 'We secured coverage in 50+ major publications within 24 hours. The targeted distribution to environmental media was exactly what we needed.' },
-              { name: 'Jennifer Foster', role: 'Marketing Director, HealthBridge', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face', review: 'From startup to industry leader in 6 months. The analytics dashboard gave us clear visibility into every pickup and engagement metric.' },
-              { name: 'David Park', role: 'Founder, FinEdge Capital', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face', review: 'The platform is incredibly easy to use. We submitted our funding announcement and it was live across 300+ outlets the same day. Outstanding.' },
-              { name: 'Ryan Mitchell', role: 'Head of PR, CloudStack Inc.', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=face', review: 'Best investment we made for our media strategy. The SEO boost from the distribution alone was worth every penny. Highly recommend.' },
-              { name: 'Carlos Mendez', role: 'Communications Lead, AutoDrive', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face', review: 'Our EV launch got picked up by TechCrunch, Reuters, and Bloomberg — all through Reporterahead. The reach is genuinely global.' },
-            ].map((item, i) => (
-              <div key={i} className="rounded-xl bg-white p-6 shadow-lg">
-                <div className="flex gap-1">
-                  {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="h-5 w-5 fill-[#F78812] text-[#F78812]" />
-                  ))}
+              <div className="mb-6 flex items-center gap-3">
+                <div
+                  className="flex h-10 w-10 items-center justify-center rounded-lg"
+                  style={{ background: C.orange }}
+                >
+                  <Globe className="h-5 w-5 text-[#F1EFDC]" />
                 </div>
-                <p className="mt-4 text-gray-700">"{item.review}"</p>
-                <div className="mt-6 flex items-center gap-3">
-                  <img src={item.avatar} alt={item.name} className="h-10 w-10 rounded-full object-cover" />
+                <div>
+                  <p className="text-sm font-semibold" style={{ color: C.sand }}>Global Distribution</p>
+                  <p className="text-xs" style={{ color: 'rgba(230,210,170,0.6)' }}>150+ Countries Covered</p>
+                </div>
+              </div>
+              {[
+                { label: 'Press Release Submitted', time: '2 min ago', status: 'Live' },
+                { label: 'Picked up by Reuters', time: '14 min ago', status: 'Coverage' },
+                { label: 'Featured in TechCrunch', time: '1 hr ago', status: 'Featured' },
+                { label: 'Bloomberg syndication', time: '3 hr ago', status: 'Syndicated' },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="mb-3 flex items-center justify-between rounded-lg px-4 py-3"
+                  style={{ background: 'rgba(241,239,220,0.07)', border: `1px solid rgba(230,210,170,0.10)` }}
+                >
                   <div>
-                    <div className="font-semibold text-gray-900">{item.name}</div>
-                    <div className="text-sm text-gray-600">{item.role}</div>
+                    <p className="text-sm font-medium" style={{ color: C.sand }}>{item.label}</p>
+                    <p className="text-xs" style={{ color: 'rgba(230,210,170,0.55)' }}>{item.time}</p>
                   </div>
+                  <span
+                    className="rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em]"
+                    style={{ background: 'rgba(211,107,0,0.25)', color: C.sand }}
+                  >
+                    {item.status}
+                  </span>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="bg-gray-50 py-16">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Frequently Asked Questions
-            </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Everything you need to know about our release media distribution service
-            </p>
-          </div>
-          <div className="mt-12 space-y-4">
-            {[
-              {
-                q: "How quickly will my release media be distributed?",
-                a: "Once submitted, your release media is typically distributed within 24-48 hours to our extensive network of media outlets."
-              },
-              {
-                q: "Can I target specific industries or regions?",
-                a: "Yes, we offer targeted distribution options allowing you to reach specific industries, geographic regions, or media types."
-              },
-              {
-                q: "Do you provide analytics and reporting?",
-                a: "Absolutely! We provide detailed analytics including views, clicks, pickup by media outlets, and engagement metrics."
-              },
-              {
-                q: "What's included in the distribution package?",
-                a: "Our packages include distribution to thousands of journalists, media monitoring, analytics reports, and optimization recommendations."
-              },
-              {
-                q: "Can I edit my release media after submission?",
-                a: "Yes, you can make edits within the first 2 hours of submission. After distribution begins, changes require additional processing."
-              },
-              {
-                q: "Do you offer writing assistance?",
-                a: "Yes, we have professional writers who can help craft compelling release media that maximize media pickup."
-              }
-            ].map((faq, i) => (
-              <div key={i} className="rounded-xl bg-white p-6 shadow-lg">
-                <h3 className="text-lg font-semibold text-gray-900">{faq.q}</h3>
-                <p className="mt-2 text-gray-600">{faq.a}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </main>
+      </div>
+    </section>
   )
 }
 
+// ─── How It Works ─────────────────────────────────────────────────────────────
+function HowItWorks() {
+  const steps = [
+    { icon: Target, title: 'Pick Your Audience', desc: 'Choose target industries, regions, and media types for precise distribution.' },
+    { icon: FileText, title: 'Write & Submit', desc: 'Craft your release using our guided editor and submit in minutes.' },
+    { icon: Globe, title: 'Reach the World', desc: 'Your story reaches thousands of journalists and media outlets instantly.' },
+    { icon: BarChart, title: 'Track Results', desc: 'Monitor pickups, views, and engagement with real-time analytics.' },
+  ]
+
+  return (
+    <section style={{ background: C.parchment }} className="py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <div
+            className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em]"
+            style={{ background: 'rgba(66,3,44,0.08)', color: C.deep, border: `1px solid rgba(66,3,44,0.12)` }}
+          >
+            Simple Process
+          </div>
+          <h2
+            className="text-3xl font-bold tracking-tight sm:text-4xl"
+            style={{ color: C.deep, fontFamily: 'var(--font-display, serif)' }}
+          >
+            How It Works
+          </h2>
+          <p className="mt-4 text-lg" style={{ color: C.muted }}>
+            Get your press release distributed in 4 simple steps
+          </p>
+        </div>
+
+        <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {steps.map((step, i) => (
+            <div key={step.title} className="relative text-center">
+              {i < steps.length - 1 && (
+                <div
+                  className="absolute left-[calc(50%+2.5rem)] top-6 hidden h-px w-[calc(100%-5rem)] lg:block"
+                  style={{ background: `linear-gradient(90deg, ${C.orange}, transparent)` }}
+                />
+              )}
+              <div
+                className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-xl"
+                style={{ background: C.deep }}
+              >
+                <step.icon className="h-6 w-6" style={{ color: C.sand }} />
+              </div>
+              <div
+                className="mb-1 text-xs font-bold uppercase tracking-[0.2em]"
+                style={{ color: C.orange }}
+              >
+                Step {i + 1}
+              </div>
+              <h3 className="text-base font-semibold" style={{ color: C.deep }}>{step.title}</h3>
+              <p className="mt-2 text-sm leading-6" style={{ color: C.muted }}>{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Stats / Trust Band ───────────────────────────────────────────────────────
+function TrustBand() {
+  const stats = [
+    { value: '50,000+', label: 'Releases Distributed' },
+    { value: '10,000+', label: 'Media Outlets' },
+    { value: '150+', label: 'Countries Reached' },
+    { value: '4.9/5', label: 'Average Rating' },
+  ]
+
+  return (
+    <section style={{ background: C.sand }} className="py-14">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
+          {stats.map((stat) => (
+            <div key={stat.label} className="text-center">
+              <div
+                className="text-3xl font-bold"
+                style={{ color: C.deep, fontFamily: 'var(--font-display, serif)' }}
+              >
+                {stat.value}
+              </div>
+              <div className="mt-1 text-sm font-medium" style={{ color: C.muted }}>
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Features ─────────────────────────────────────────────────────────────────
+function Features() {
+  const features = [
+    {
+      icon: Globe,
+      title: 'Global Reach',
+      desc: 'Distribute to 10,000+ media outlets across 150+ countries with a single submission.',
+    },
+    {
+      icon: Zap,
+      title: 'Instant Distribution',
+      desc: 'Your release goes live within hours, not days. Real-time syndication to top wire services.',
+    },
+    {
+      icon: BarChart,
+      title: 'Detailed Analytics',
+      desc: 'Track every pickup, view, and engagement metric through a clean, real-time dashboard.',
+    },
+    {
+      icon: Shield,
+      title: 'Editorial Standards',
+      desc: 'Our editorial team reviews every release to ensure quality and maximize media pickup.',
+    },
+    {
+      icon: Target,
+      title: 'Targeted Distribution',
+      desc: 'Reach the right journalists by industry, beat, geography, and publication type.',
+    },
+    {
+      icon: TrendingUp,
+      title: 'SEO Amplification',
+      desc: 'Permanent indexed links from high-authority domains boost your search visibility.',
+    },
+  ]
+
+  return (
+    <section style={{ background: C.parchment }} className="py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <div
+            className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em]"
+            style={{ background: 'rgba(211,107,0,0.10)', color: C.orange, border: `1px solid rgba(211,107,0,0.18)` }}
+          >
+            Why Choose Us
+          </div>
+          <h2
+            className="text-3xl font-bold tracking-tight sm:text-4xl"
+            style={{ color: C.deep, fontFamily: 'var(--font-display, serif)' }}
+          >
+            Everything You Need to Get Covered
+          </h2>
+          <p className="mt-4 max-w-2xl mx-auto text-lg" style={{ color: C.muted }}>
+            A complete media distribution platform built for modern communications teams.
+          </p>
+        </div>
+
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((feat) => (
+            <div
+              key={feat.title}
+              className="rounded-xl p-6 transition-shadow hover:shadow-lg"
+              style={{ background: C.cardBg, border: `1px solid ${C.border}` }}
+            >
+              <div
+                className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg"
+                style={{ background: 'rgba(66,3,44,0.08)' }}
+              >
+                <feat.icon className="h-5 w-5" style={{ color: C.deep }} />
+              </div>
+              <h3 className="text-base font-semibold" style={{ color: C.deep }}>{feat.title}</h3>
+              <p className="mt-2 text-sm leading-6" style={{ color: C.muted }}>{feat.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Testimonials ─────────────────────────────────────────────────────────────
+function Testimonials() {
+  const testimonials = [
+    {
+      name: 'Alexandra Chen',
+      role: 'VP of Communications',
+      company: 'NexusTech',
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop&crop=face',
+      content: 'We saw a 300% increase in media pickup after switching to Press Narrixa. Our product launch reached over 2 million readers through their network.',
+      rating: 5,
+    },
+    {
+      name: 'Marcus Williams',
+      role: 'CEO',
+      company: 'GreenFuture Solutions',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=96&h=96&fit=crop&crop=face',
+      content: 'The targeted distribution helped us secure coverage in major environmental publications. Exactly what our sustainability initiative needed.',
+      rating: 5,
+    },
+    {
+      name: 'Jennifer Foster',
+      role: 'Marketing Director',
+      company: 'HealthBridge Medical',
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=96&h=96&fit=crop&crop=face',
+      content: 'From startup to industry leader in 6 months. Press Narrixa\'s distribution was key to our rapid growth and credibility.',
+      rating: 5,
+    },
+  ]
+
+  return (
+    <section style={{ background: C.sand }} className="py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2
+            className="text-3xl font-bold tracking-tight sm:text-4xl"
+            style={{ color: C.deep, fontFamily: 'var(--font-display, serif)' }}
+          >
+            Success Stories
+          </h2>
+          <p className="mt-4 text-lg" style={{ color: C.muted }}>
+            Real results from businesses that trust us for their media distribution
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-8 lg:grid-cols-3">
+          {testimonials.map((t) => (
+            <div
+              key={t.name}
+              className="rounded-xl p-8"
+              style={{ background: C.parchment, border: `1px solid ${C.border}` }}
+            >
+              <Quote className="mb-4 h-7 w-7" style={{ color: C.orange }} />
+              <p className="text-base leading-7" style={{ color: C.deep }}>{t.content}</p>
+              <div className="mt-6 flex items-center gap-3">
+                <img
+                  src={t.avatar}
+                  alt={t.name}
+                  className="h-11 w-11 rounded-full object-cover"
+                />
+                <div>
+                  <div className="text-sm font-semibold" style={{ color: C.deep }}>{t.name}</div>
+                  <div className="text-xs" style={{ color: C.muted }}>{t.role} · {t.company}</div>
+                  <div className="mt-1 flex gap-0.5">
+                    {Array.from({ length: t.rating }).map((_, i) => (
+                      <Star key={i} className="h-3.5 w-3.5 fill-current" style={{ color: C.orange }} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Latest Releases ──────────────────────────────────────────────────────────
+const mockReleases = [
+  { id: 1, title: 'TechStart Inc. Announces $50M Series C Funding Round', category: 'Technology', author: 'Sarah Johnson', image: 'https://picsum.photos/seed/tech1/600/400', excerpt: 'Leading AI technology company secures major investment to expand global operations.' },
+  { id: 2, title: 'Global Marketing Co. Launches Revolutionary Digital Campaign Platform', category: 'Marketing', author: 'Michael Chen', image: 'https://picsum.photos/seed/marketing2/600/400', excerpt: 'New platform promises to transform how businesses connect with customers.' },
+  { id: 3, title: 'EcoTech Solutions Unveils Carbon-Neutral Manufacturing Process', category: 'Sustainability', author: 'Robert Green', image: 'https://picsum.photos/seed/eco4/600/400', excerpt: 'Pioneering sustainable manufacturing method reduces carbon emissions by 90%.' },
+  { id: 4, title: 'HealthTech Startup Receives FDA Approval for Medical Device', category: 'Healthcare', author: 'Dr. Lisa Wang', image: 'https://picsum.photos/seed/health5/600/400', excerpt: 'Breakthrough diagnostic technology promises early detection of diseases.' },
+  { id: 5, title: 'FinTech Company Disrupts Traditional Banking with Digital-First Approach', category: 'Finance', author: 'James Miller', image: 'https://picsum.photos/seed/finance6/600/400', excerpt: 'New mobile banking platform offers zero-fee transactions and AI-powered advice.' },
+  { id: 6, title: 'Automotive Startup Unveils Electric Vehicle with 500-Mile Range', category: 'Automotive', author: 'Carlos Rodriguez', image: 'https://picsum.photos/seed/auto9/600/400', excerpt: 'Revolutionary battery technology sets new standards for EV performance.' },
+]
+
+function LatestReleases() {
+  return (
+    <section style={{ background: C.parchment }} className="py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-end justify-between">
+          <div>
+            <div
+              className="mb-3 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em]"
+              style={{ background: 'rgba(66,3,44,0.08)', color: C.deep, border: `1px solid rgba(66,3,44,0.12)` }}
+            >
+              Latest News
+            </div>
+            <h2
+              className="text-3xl font-bold tracking-tight sm:text-4xl"
+              style={{ color: C.deep, fontFamily: 'var(--font-display, serif)' }}
+            >
+              Recent Press Releases
+            </h2>
+          </div>
+          <Link
+            href="/press-releases"
+            className="hidden items-center gap-2 text-sm font-semibold transition-colors hover:opacity-80 sm:flex"
+            style={{ color: C.orange }}
+          >
+            View all <ChevronRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {mockReleases.map((release) => (
+            <article
+              key={release.id}
+              className="group overflow-hidden rounded-xl transition-shadow hover:shadow-lg"
+              style={{ background: C.cardBg, border: `1px solid ${C.border}` }}
+            >
+              <div className="aspect-video overflow-hidden">
+                <img
+                  src={release.image}
+                  alt={release.title}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <div className="p-5">
+                <span
+                  className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em]"
+                  style={{ background: 'rgba(211,107,0,0.10)', color: C.orange }}
+                >
+                  {release.category}
+                </span>
+                <h3
+                  className="mt-3 text-base font-semibold leading-snug transition-colors group-hover:opacity-80 line-clamp-2"
+                  style={{ color: C.deep }}
+                >
+                  <Link href={`/press-releases/${release.id}`}>{release.title}</Link>
+                </h3>
+                <p className="mt-2 text-sm leading-6 line-clamp-2" style={{ color: C.muted }}>
+                  {release.excerpt}
+                </p>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text-xs" style={{ color: C.muted }}>{release.author}</span>
+                  <Link
+                    href={`/press-releases/${release.id}`}
+                    className="inline-flex items-center gap-1 text-xs font-semibold transition-colors hover:opacity-80"
+                    style={{ color: C.orange }}
+                  >
+                    Read more <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-10 text-center sm:hidden">
+          <Link
+            href="/press-releases"
+            className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-all hover:opacity-90"
+            style={{ background: C.deep, color: C.parchment }}
+          >
+            View All Releases <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── FAQ ──────────────────────────────────────────────────────────────────────
+function FAQ() {
+  const faqs = [
+    { q: 'How quickly will my press release be distributed?', a: 'Once submitted and approved, your release is typically distributed within 24–48 hours to our full network of media outlets.' },
+    { q: 'Can I target specific industries or regions?', a: 'Yes. We offer targeted distribution options allowing you to reach specific industries, geographic regions, or media types.' },
+    { q: 'Do you provide analytics and reporting?', a: 'Absolutely. We provide detailed analytics including views, clicks, pickup by media outlets, and engagement metrics.' },
+    { q: 'Can I edit my release after submission?', a: 'You can make edits within the first 2 hours of submission. After distribution begins, changes require additional processing.' },
+    { q: 'Do you offer writing assistance?', a: 'Yes. Our professional writers can help craft compelling press releases that maximize media pickup.' },
+    { q: 'What formats are supported?', a: 'We support plain text, rich HTML, and PDF uploads. Images and multimedia attachments are also accepted.' },
+  ]
+
+  return (
+    <section style={{ background: C.sand }} className="py-20">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2
+            className="text-3xl font-bold tracking-tight sm:text-4xl"
+            style={{ color: C.deep, fontFamily: 'var(--font-display, serif)' }}
+          >
+            Frequently Asked Questions
+          </h2>
+          <p className="mt-4 text-lg" style={{ color: C.muted }}>
+            Everything you need to know about our press release distribution service
+          </p>
+        </div>
+
+        <div className="mt-12 space-y-4">
+          {faqs.map((faq) => (
+            <div
+              key={faq.q}
+              className="rounded-xl p-6"
+              style={{ background: C.parchment, border: `1px solid ${C.border}` }}
+            >
+              <h3 className="text-base font-semibold" style={{ color: C.deep }}>{faq.q}</h3>
+              <p className="mt-2 text-sm leading-6" style={{ color: C.muted }}>{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── CTA Banner ───────────────────────────────────────────────────────────────
+function CTABanner() {
+  return (
+    <section
+      style={{ background: `linear-gradient(135deg, ${C.deep} 0%, #6B0A48 100%)` }}
+      className="py-20"
+    >
+      <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+        <h2
+          className="text-3xl font-bold tracking-tight sm:text-4xl"
+          style={{ color: C.parchment, fontFamily: 'var(--font-display, serif)' }}
+        >
+          Ready to Amplify Your Story?
+        </h2>
+        <p className="mt-5 text-lg" style={{ color: 'rgba(230,210,170,0.80)' }}>
+          Join thousands of companies that trust Press Narrixa for their media distribution needs.
+        </p>
+        <div className="mt-10 flex flex-wrap justify-center gap-4">
+          <Link
+            href="/press-releases"
+            className="inline-flex items-center gap-2 rounded-lg px-8 py-3.5 text-sm font-semibold transition-all hover:opacity-90"
+            style={{ background: C.orange, color: C.parchment }}
+          >
+            Submit Your Release
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-2 rounded-lg px-8 py-3.5 text-sm font-semibold transition-all"
+            style={{ background: 'rgba(241,239,220,0.12)', color: C.sand, border: `1px solid rgba(230,210,170,0.28)` }}
+          >
+            Talk to Sales
+          </Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Page export ──────────────────────────────────────────────────────────────
 export default async function HomePage() {
-  if (HOME_PAGE_OVERRIDE_ENABLED) {
-    return <HomePageOverride />
-  }
-
-  const enabledTasks = SITE_CONFIG.tasks.filter((task) => task.enabled)
-  const { recipe } = getFactoryState()
-  const primaryTask = enabledTasks.find((task) => task.key === recipe.primaryTask) || enabledTasks[0]
-  
-  const posts = await fetchTaskPosts('mediaDistribution', 6, { 
-    allowMockFallback: true, 
-    fresh: false, 
-    revalidate: 120 
-  })
-
   const schemaData = [
     {
       '@context': 'https://schema.org',
@@ -422,10 +618,17 @@ export default async function HomePage() {
   ]
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen" style={{ background: C.parchment, color: C.deep }}>
       <NavbarShell />
       <SchemaJsonLd data={schemaData} />
-      <MediaPressReleaseHome primaryTask={primaryTask} posts={posts} />
+      <Hero />
+      <TrustBand />
+      <HowItWorks />
+      <Features />
+      <LatestReleases />
+      <Testimonials />
+      <FAQ />
+      <CTABanner />
       <Footer />
     </div>
   )
