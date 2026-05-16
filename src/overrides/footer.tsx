@@ -37,10 +37,16 @@ export function FooterOverride() {
           <div>
             <Link href="/" className="flex items-center gap-3">
               <img
-                src="/logo.svg"
+                src="/logo-icon.svg"
                 alt={SITE_CONFIG.name}
-                className="h-10 w-auto object-contain brightness-0 invert"
+                className="h-10 w-10 object-contain"
               />
+              <span
+                style={{ fontFamily: 'var(--font-display, serif)', color: '#F1EFDC' }}
+                className="text-xl font-bold"
+              >
+                {SITE_CONFIG.name}
+              </span>
             </Link>
             <p className="mt-5 max-w-xs text-sm leading-7" style={{ color: '#C4A98A' }}>
               {SITE_CONFIG.description}
