@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { Twitter, Linkedin, Mail, ArrowRight } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
+import { fetchTaskPosts } from '@/lib/task-data'
+import { CATEGORY_OPTIONS, normalizeCategory } from '@/lib/categories'
 
 export const FOOTER_OVERRIDE_ENABLED = true
 
@@ -171,6 +173,24 @@ export function FooterOverride() {
             Independent media distribution platform
           </p>
         </div>
+
+        {categories.length ? (
+          <div className="mt-8 border-t border-current/10 pt-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] opacity-70">Categories</p>
+            <div className="mt-3 flex flex-wrap gap-3 text-sm">
+              {categories.map((category) => (
+                <Link
+                  key={category.slug}
+                  href={`/updates?category=${category.slug}`}
+                  className="opacity-80 underline-offset-4 transition hover:opacity-100 hover:underline"
+                >
+                  {category.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
       </div>
     </footer>
   )
