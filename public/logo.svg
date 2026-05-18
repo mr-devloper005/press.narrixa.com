@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 52" fill="none">
+  <!-- Icon mark: stylised "N" newspaper fold -->
+  <rect x="0" y="0" width="48" height="48" rx="10" fill="#42032C"/>
+  <!-- Newspaper lines inside the mark -->
+  <rect x="10" y="10" width="28" height="3.5" rx="1.5" fill="#E6D2AA"/>
+  <rect x="10" y="17" width="20" height="2.5" rx="1.2" fill="#D36B00"/>
+  <rect x="10" y="23" width="28" height="2" rx="1" fill="rgba(230,210,170,0.5)"/>
+  <rect x="10" y="28" width="22" height="2" rx="1" fill="rgba(230,210,170,0.5)"/>
+  <rect x="10" y="33" width="16" height="2" rx="1" fill="rgba(230,210,170,0.35)"/>
+  <!-- Accent dot -->
+  <circle cx="38" cy="38" r="4" fill="#D36B00"/>
+
+  <!-- Wordmark -->
+  <!-- "Press" -->
+  <text
+    x="60"
+    y="22"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="17"
+    font-weight="700"
+    letter-spacing="0.5"
+    fill="#42032C"
+  >Press</text>
+  <!-- "NARRIXA" -->
+  <text
+    x="60"
+    y="40"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="19"
+    font-weight="700"
+    letter-spacing="2"
+    fill="#42032C"
+  >NARRIXA</text>
+  <!-- Orange underline accent -->
+  <rect x="60" y="43" width="148" height="2.5" rx="1.2" fill="#D36B00"/>
+</svg>
