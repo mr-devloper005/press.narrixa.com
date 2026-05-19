@@ -97,14 +97,6 @@ export async function TaskListPageOverride(_: { task: TaskKey; category?: string
 
               {/* Meta */}
               <div className="mt-3 flex flex-wrap items-center gap-3 text-xs" style={{ color: C.muted }}>
-                <span
-                  className="rounded px-2.5 py-1 text-xs font-medium"
-                  style={{ background: 'rgba(66,3,44,0.08)', color: C.deep }}
-                >
-                  {new Date(post.publishedAt || Date.now()).toLocaleDateString('en-US', {
-                    month: 'long', day: 'numeric', year: 'numeric',
-                  })}
-                </span>
                 <span>by {post.authorName || 'Editorial Desk'}</span>
               </div>
 
@@ -181,11 +173,6 @@ export async function TaskListPageOverride(_: { task: TaskKey; category?: string
                   </span>
                   <p className="text-sm font-medium leading-5" style={{ color: C.deep }}>
                     {post.title}
-                  </p>
-                  <p className="mt-1 text-xs" style={{ color: C.muted }}>
-                    {new Date(post.publishedAt || Date.now()).toLocaleDateString('en-US', {
-                      month: 'short', day: 'numeric', year: 'numeric',
-                    })}
                   </p>
                 </Link>
               ))}
