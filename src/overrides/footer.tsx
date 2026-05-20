@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Twitter, Linkedin, Mail, ArrowRight } from 'lucide-react'
+import { Twitter, Linkedin, Mail } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
 
 export const FOOTER_OVERRIDE_ENABLED = true
@@ -51,27 +51,6 @@ export function FooterOverride() {
             <p className="mt-5 max-w-xs text-sm leading-7" style={{ color: '#C4A98A' }}>
               {SITE_CONFIG.description}
             </p>
-            {/* Newsletter mini-form */}
-            <div className="mt-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: '#E6D2AA' }}>
-                Stay informed
-              </p>
-              <div className="mt-3 flex gap-0">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="h-10 flex-1 rounded-l-md border-0 px-3 text-sm outline-none"
-                  style={{ background: 'rgba(241,239,220,0.12)', color: '#F1EFDC' }}
-                />
-                <button
-                  style={{ background: '#D36B00', color: '#F1EFDC' }}
-                  className="flex h-10 w-10 items-center justify-center rounded-r-md transition-opacity hover:opacity-90"
-                  aria-label="Subscribe"
-                >
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
             {/* Social links */}
             <div className="mt-6 flex gap-3">
               {socialLinks.map((item) => (
