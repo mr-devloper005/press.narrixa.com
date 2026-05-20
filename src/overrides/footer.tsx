@@ -28,7 +28,19 @@ const socialLinks = [
   { label: 'Email', href: 'mailto:contact@press.narrixa.com', icon: Mail },
 ]
 
-export function FooterOverride() {
+export async function FooterOverride() {
+  const posts = await fetchTaskPosts('mediaDistribution', 100, { fresh: false })
+  const categorySlugs = Array.from(
+    new Set(
+      posts
+        .map((post) => normalizeCategory(post.category || ''))
+        .filter(Boolean),
+    ),
+  )
+  const categories = categorySlugs
+    .map((slug) => CATEGORY_OPTIONS.find((category) => category.slug === slug))
+    .filter((category): category is (typeof CATEGORY_OPTIONS)[number] => Boolean(category))
+
   return (
     <footer style={{ background: '#42032C', color: '#E6D2AA' }}>
       {/* Main footer body */}
